@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Notifications</title>
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h2>Notifications</h2>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Message</th>
+            <th>Created At</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="n : ${notifications}">
+            <td th:text="${n.id}"></td>
+            <td th:text="${n.message}"></td>
+            <td th:text="${n.createdAt}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

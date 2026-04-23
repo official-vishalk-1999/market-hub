@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <script>
+        window.history.pushState(null, "", window.location.href);
+        window.onpopstate = function () {
+            window.location.href = "/";
+        };
+    </script>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+    <span class="navbar-brand">Admin Dashboard</span>
+    <a href="/auth/logout" class="btn btn-danger btn-sm">Logout</a>
+</nav>
+
+<div class="container mt-5 text-center">
+
+    <h3>Welcome Admin</h3>
+
+    <div class="mt-4">
+
+        <a href="/admin/add-product" class="btn btn-primary m-2">
+            Add Product
+        </a>
+
+        <a href="/admin/products" class="btn btn-success m-2">
+            View Products
+        </a>
+
+        <a href="/admin/notifications" class="btn btn-warning m-2">
+            Notifications
+        </a>
+
+        <a href="/admin/users" class="btn btn-info m-2">
+            Users
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Orders</title>
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <script>
+        window.history.pushState(null, "", window.location.href);
+        window.onpopstate = function () {
+            window.location.href = "/";
+        };
+    </script>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+</head>
+
+<body>
+
+<nav class="navbar navbar-dark bg-dark">
+    <span class="navbar-brand">
+        Welcome, <span th:text="${username}"></span>
+    </span>
+    <div>
+        <a href="/user/products" class="btn btn-primary btn-sm">Products</a>
+        <a href="/auth/logout" class="btn btn-danger btn-sm">Logout</a>
+    </div>
+</nav>
+
+<div class="container mt-3">
+    <div th:if="${param.success == 'cancelled'}" class="alert alert-success">
+        Order cancelled successfully!
+    </div>
+</div>
+
+<div class="container mt-4">
+
+    <table class="table table-bordered">
+
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="o : ${orders}">
+            <td th:text="${o.productName}"></td>
+            <td th:text="${o.quantity}"></td>
+            <td>
+                <a th:href="@{'/user/cancel/' + ${o.productId}}"
+                   class="btn btn-danger btn-sm">
+                    Cancel
+                </a>
+            </td>
+        </tr>
+        </tbody>
+
+    </table>
+
+</div>
+
+<script>
+    (function () {
+        const params = new URLSearchParams(window.location.search);
+        const success = params.get("success");
+
+        if (!success) return;
+
+        let message = "";
+
+        if (success === "added") message = "Product added successfully!";
+        if (success === "updated") message = "Product updated successfully!";
+        if (success === "deleted") message = "Product deleted successfully!";
+        if (success === "ordered") message = "Order placed successfully!";
+        if (success === "cancelled") message = "Order cancelled successfully!";
+
+        if (message) {
+            setTimeout(() => {
+                alert(message);
+            }, 100);
+
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    })();
+</script>
+
+</body>
+</html>
