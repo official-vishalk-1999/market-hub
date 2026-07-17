@@ -7,44 +7,26 @@ import com.markethub.repository.ProductRepository;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 @Service
 public class NotificationConsumer {
 
-    private final NotificationRepository notificationRepository;
-    private final ProductRepository productRepository;
+    private final NotificationRepository notifications;
+    private final ProductRepository products;
 
-    public NotificationConsumer(NotificationRepository notificationRepository,
-                                ProductRepository productRepository) {
-        this.notificationRepository = notificationRepository;
-        this.productRepository = productRepository;
+    public NotificationConsumer(NotificationRepository notifications, ProductRepository products) {
+        this.notifications = notifications;
+        this.products = products;
     }
 
     @KafkaListener(topics = "order-events", groupId = "notification-group")
-    public void consume(String message) {
+    public void consume(String event) {
+        String[] parts = event.split(",");
+        Long productId = Long.parseLong(parts[0]);
+        int quantity = Integer.parseInt(parts[1]);
+        String name = products.findById(productId).map(Product::getName).orElse("Unknown");
 
-        String[] parts = message.split(",");
-
-        Long orderId = Long.parseLong(parts[0]);
-        Long productId = Long.parseLong(parts[1]);
-        int quantity = Integer.parseInt(parts[2]);
-
-        Product product = productRepository.findById(productId).orElse(null);
-
-        if (product != null) {
-
-            Notification notification = new Notification();
-
-            notification.setMessage(
-                    "Order ID " + orderId +
-                            " placed for " + product.getName() +
-                            " (Qty: " + quantity + ")"
-            );
-
-            notification.setCreatedAt(LocalDateTime.now());
-
-            notificationRepository.save(notification);
-        }
+        Notification notification = new Notification();
+        notification.setMessage("Product - " + name + ", Quantity Ordered - " + quantity);
+        notifications.save(notification);
     }
 }
